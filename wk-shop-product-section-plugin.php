@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Wk Shop Product Section
  * Description: Displays a section with products. Displays a title, description and products. 3 per row.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: Wictor K
  * 
  * This plugin is designed to work well with Tailwind CSS for styling.
@@ -40,7 +40,7 @@ function wk_shop_product_section_shortcode($atts) {
 
     ob_start();
     ?>
-    <div class="custom-product-section w-full flex flex-col justify-center items-center">
+    <div class="wk-shop-product-section-wrapper w-full flex flex-col justify-center items-center">
         <hr />
         <h2 class="text-2xl text-center font-roboto">
             <?php echo esc_html($atts['title']); ?>
@@ -57,12 +57,12 @@ function wk_shop_product_section_shortcode($atts) {
             while ($query->have_posts()) : $query->the_post();
             global $product;
             if ( empty( $product ) || ! $product->is_visible() ) {
-                return;
+                continue;
             }
             ?>
             <li class="list-none flex-shrink-0 flex-1/3">
                 <a href="<?php echo esc_url(get_permalink($product->get_id())); ?>">
-                    <?php echo $product->get_image() ?>
+                    <?php echo wp_kses_post($product->get_image()); ?>
                     <div class="w-full border-t border-solid border-black text-center border-b font-roboto font-light py-2 text-[12px]">
                         <?php echo esc_html($product->get_title()); ?>
                     </div>
